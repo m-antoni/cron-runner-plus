@@ -6,7 +6,7 @@ import Link from 'next/link';
 import EnvForm from '@/app/components/forms/EnvForm';
 import AppForm from '@/app/components/forms/AppForm';
 
-export default function EnvironmentDetails() {
+export default function AddNew() {
   return (
     <div className="row">
       <div className="col-md-12">

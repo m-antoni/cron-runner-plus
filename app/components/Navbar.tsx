@@ -39,26 +39,26 @@ export default function Navbar() {
           </button>
           <div className="collapse navbar-collapse" id="navigation">
             <ul className="navbar-nav ml-auto">
-              <li className="search-bar input-group">
+              <li className="search-bar input-group mt-1">
                 <button
                   className="btn btn-link"
                   id="search-button"
                   data-toggle="modal"
                   data-target="#searchModal"
                 >
-                  <FaMagnifyingGlass size={20} className="text-light" />
+                  <FaMagnifyingGlass size={16} className="text-light mb-1 mr-n2" />
                   {/* <span className="d-lg-none d-md-block">Search</span> */}
                 </button>
               </li>
-              <li className="dropdown nav-item">
+              <li className="dropdown nav-item mt-1">
                 <a
                   href="javascript:void(0)"
-                  className="dropdown-toggle nav-link"
+                  className="dropdown-toggle nav-link mr-n1"
                   data-toggle="dropdown"
                 >
+                  <FaBell size={16} />
                   {/* <div className="notification d-none d-lg-block d-xl-block" /> */}
-                  <FaBell size={20} />
-                  <p className="d-lg-none">Notifications</p>
+                  {/* <p className="d-lg-none">Notifications</p> */}
                 </a>
                 <ul className="dropdown-menu dropdown-menu-right dropdown-navbar">
                   <li className="nav-link">

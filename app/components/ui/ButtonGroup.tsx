@@ -1,7 +1,7 @@
 'use client';
 
 import Link from 'next/link';
-import { FaCopy, FaEye, FaPlus, FaDownload, FaBolt } from 'react-icons/fa6';
+import { FaCopy, FaEye, FaPlus, FaDownload, FaBolt, FaEllipsis, FaGear } from 'react-icons/fa6';
 import Dropdown from 'react-bootstrap/Dropdown';
 
 type ButtonGroupProps = { id: number };
@@ -9,14 +9,16 @@ type ButtonGroupProps = { id: number };
 export default function ButtonGroup({ id }: ButtonGroupProps) {
   return (
     <div className="d-flex justify-content-end">
-      <Dropdown className="custom-dropdown">
+      <Dropdown className="right-dropdown">
         <Dropdown.Toggle
           variant="-secondary"
           id="env-options"
           className="d-flex justify-content-between align-items-center px-3"
           bsPrefix="custom-dropdown-toggle"
         >
-          <span>Actions</span>
+          <span>
+            <FaGear />
+          </span>
           <span className="custom-caret">▼</span>
         </Dropdown.Toggle>
 
