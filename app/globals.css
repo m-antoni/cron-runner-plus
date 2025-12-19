@@ -1,1 +1,33 @@
 /* @import "tailwindcss"; */
+
+/* Main Icon React Spinner*/
+.spin-clockwise {
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+/* End Main Icon React Spinner*/
+
+.fs-11 {
+  font-size: 11px;
+  font-weight: 600;
+}
+
+/* custom dropdown */
+.custom-dropdown .dropdown-menu:before {
+  left: auto; /* reset left */
+  right: 1rem; /* adjust distance from right edge */
+}
+/* Custom caret aligned to right */
+.custom-caret {
+  font-size: 0.7rem;
+  margin-left: 0.5rem;
+}
+/* end custom dropdown */

@@ -3,16 +3,6 @@ import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
 import Script from 'next/script';
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-});
-
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-});
-
 export const metadata: Metadata = {
   title: 'Cron Runner Plus',
   description: 'Created by Michael Antoni',
@@ -36,13 +26,13 @@ export default function RootLayout({
         {/* Black Dashboard CSS */}
         <link href="/assets/css/black-dashboard.css?v=1.0.0" rel="stylesheet" />
       </head>
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body>
         {children}
 
         {/* Core JS Files */}
         <Script src="/assets/js/core/jquery.min.js" strategy="beforeInteractive" />
-        <Script src="/assets/js/core/popper.min.js" strategy="afterInteractive" />
-        <Script src="/assets/js/core/bootstrap.min.js" strategy="afterInteractive" />
+        <Script src="/assets/js/core/popper.min.js" strategy="beforeInteractive" />
+        <Script src="/assets/js/core/bootstrap.min.js" strategy="beforeInteractive" />
 
         {/* Plugins */}
         <Script
