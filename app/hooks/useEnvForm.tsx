@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { generate32CharToken } from '@/app/lib/helpers';
+import { generate32CharToken, isSingleEmpty } from '@/app/lib/helpers';
 
 type EnvItem = {
   envKey: string;
@@ -29,17 +29,56 @@ export function useEnvForm() {
     setEnv((prev) => prev.filter((_, i) => i !== rowIndex));
   };
 
-  // import from .env file
-  const importEnv = (): void => {
-    console.log('IMPORT ENV FILE');
-  };
-
   // disabled the remove button if its only 1 row
   const disabledInput = (): boolean => (env.length === 1 ? true : false);
 
   // onChange input row
   const onChangeEnv = (index: number, field: 'envKey' | 'envValue', value: string): void => {
     setEnv((prev) => prev.map((item, i) => (i === index ? { ...item, [field]: value } : item)));
+  };
+
+  // import from .env file
+  const importEnv = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Allow only .env or .env.*
+    if (!file.name.startsWith('.env')) {
+      e.target.value = '';
+      return; // stop processing
+    }
+
+    const reader = new FileReader();
+
+    reader.onload = (event: ProgressEvent<FileReader>) => {
+      const text = event.target?.result;
+      if (typeof text === 'string') {
+        // read the text from .env file
+        const lines = text.split(/\r?\n/);
+        const newRows: EnvItem[] = lines
+          .map((line) => line.trim())
+          // skip empty lines and comments
+          .filter((line) => line && !line.startsWith('#') && line.includes('='))
+          .map((line) => {
+            const [key, ...rest] = line.split('=');
+            return { envKey: key.trim(), envValue: rest.join('=').trim() };
+          });
+
+        // if the env is empty populate
+        if (isSingleEmpty(env, 'envKey', 'envValue')) {
+          setEnv(newRows);
+        } else {
+          setEnv((prev) => [...prev, ...newRows]);
+        }
+      } else {
+        console.error('Failed to read file as text');
+      }
+    };
+
+    reader.readAsText(file);
+
+    // Reset input to allow re-importing the same file
+    e.target.value = '';
   };
 
   return {

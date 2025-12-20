@@ -15,7 +15,7 @@ type SpinnerProps = {
   color?: string;
 };
 
-export function Spinner({ text = 'Loading...', color = '#ffffff' }: SpinnerProps) {
+export default function Spinner({ text = 'Loading...', color = '#ffffff' }: SpinnerProps) {
   // spinnder style override
   const override: CSSProperties = {
     display: 'block',

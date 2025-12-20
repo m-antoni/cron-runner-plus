@@ -9,13 +9,14 @@ import AppForm from '@/app/components/forms/AppForm';
 import { useEnvForm } from '@/app/hooks/useEnvForm';
 import { useAppInfoForm } from '@/app/hooks/useAppInfoForm';
 import { useSaveForm } from '@/app/hooks/useSaveForm';
-import { Spinner } from '@/app/components/ui/Spinner';
+import Spinner from '@/app/components/ui/Spinner';
+import AlertMessage from '@/app/components/ui/AlertMessage';
 
 export default function AddNew() {
   // custom hooks
   const appInfoForm = useAppInfoForm();
   const envForm = useEnvForm();
-  const { saveForm, loading } = useSaveForm();
+  const { saveForm, loading, errors } = useSaveForm();
 
   const handleSave = () => {
     saveForm(appInfoForm.appInfo, envForm.env);
@@ -24,7 +25,7 @@ export default function AddNew() {
 
   return (
     <div className="row">
-      <div className="col-md-12">
+      <div className="col-md-12 mb-n2">
         <div className="card">
           <div className="card-body">
             <div className="d-flex justify-content-between">
@@ -51,12 +52,13 @@ export default function AddNew() {
         </div>
       </div>
       <div className="col-md-12">
+        {errors.filter((err) => err).length > 0 && (
+          <AlertMessage errors={errors.filter((err) => err)} />
+        )}
+      </div>
+      <div className="col-md-12">
         <div className="card">
-          <div className="card-header">
-            <h4 className="card-title">App Information</h4>
-          </div>
           <div className="card-body">
-            {/* APP INFORMATION */}
             <AppForm {...appInfoForm} />
           </div>
         </div>
@@ -64,7 +66,6 @@ export default function AddNew() {
       <div className="col-md-12">
         <div className="card">
           <div className="card-body">
-            {/* ENVIRONMENT VARIABLES */}
             <EnvForm {...envForm} />
           </div>
         </div>

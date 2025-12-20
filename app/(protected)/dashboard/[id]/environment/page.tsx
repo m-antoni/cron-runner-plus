@@ -9,13 +9,14 @@ import AppForm from '@/app/components/forms/AppForm';
 import { useEnvForm } from '@/app/hooks/useEnvForm';
 import { useAppInfoForm } from '@/app/hooks/useAppInfoForm';
 import { useSaveForm } from '@/app/hooks/useSaveForm';
-import { Spinner } from '@/app/components/ui/Spinner';
+import Spinner from '@/app/components/ui/Spinner';
+import AlertMessage from '@/app/components/ui/AlertMessage';
 
 export default function EnvironmentDetails() {
   // custom hooks
   const envForm = useEnvForm();
   const appInfoForm = useAppInfoForm();
-  const { saveForm, loading } = useSaveForm();
+  const { saveForm, loading, errors } = useSaveForm();
 
   const handleSave = () => {
     saveForm(appInfoForm.appInfo, envForm.env);
@@ -24,7 +25,7 @@ export default function EnvironmentDetails() {
 
   return (
     <div className="row">
-      <div className="col-md-12">
+      <div className="col-md-12 mb-n2">
         <div className="card">
           <div className="card-body">
             <div className="d-flex justify-content-between">
@@ -50,19 +51,19 @@ export default function EnvironmentDetails() {
           </div>
         </div>
       </div>
+      <div className="col-12">
+        {errors.filter((err) => err).length > 0 && (
+          <AlertMessage errors={errors.filter((err) => err)} />
+        )}
+      </div>
       <div className="col-md-12">
-        {/* APP INFORMATION */}
         <div className="card">
-          <div className="card-header">
-            <h4 className="card-title">App Information</h4>
-          </div>
           <div className="card-body">
             <AppForm {...appInfoForm} />
           </div>
         </div>
       </div>
       <div className="col-md-12">
-        {/* ENVIRONMENT VARIABLES */}
         <div className="card">
           <div className="card-body">
             <EnvForm {...envForm} />

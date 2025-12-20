@@ -1,3 +1,5 @@
+'use client';
+
 import {
   FaCopy,
   FaDownload,
@@ -12,6 +14,8 @@ import {
 import { FaPlusCircle } from 'react-icons/fa';
 import { Button, Dropdown } from 'react-bootstrap';
 import Link from 'next/link';
+import { useRef } from 'react';
+import AlertMessage from '../ui/AlertMessage';
 
 type EnvItem = {
   envKey: string;
@@ -23,18 +27,19 @@ type EnvFormProps = {
   addNewRow: (v: string) => void;
   removeRow: (v: number) => void;
   onChangeEnv: (index: number, field: 'envKey' | 'envValue', value: string) => void;
-  importEnv: () => void;
+  importEnv: (e: React.ChangeEvent<HTMLInputElement>) => void;
   disabledInput: () => boolean;
 };
 
 export default function EnvForm({
   env,
   addNewRow,
-  onChangeEnv,
   removeRow,
-  importEnv,
+  onChangeEnv,
   disabledInput,
+  importEnv,
 }: EnvFormProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null);
   return (
     <>
       <div className="d-flex justify-content-between">
@@ -156,11 +161,13 @@ export default function EnvForm({
               <Dropdown.Item href="#" onClick={() => addNewRow('generateSecret')}>
                 <FaWandMagicSparkles size={16} className="mr-2" /> Generate Secret
               </Dropdown.Item>
-              <Dropdown.Item href="#" onClick={() => importEnv()}>
+              <Dropdown.Item href="#" onClick={() => fileInputRef.current?.click()}>
                 <FaFileLines size={16} className="mr-2" /> Import from .ENV
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
+          {/* Hidden file input */}
+          <input type="file" ref={fileInputRef} accept=".env*" onChange={importEnv} hidden />
         </div>
       </div>
     </>
