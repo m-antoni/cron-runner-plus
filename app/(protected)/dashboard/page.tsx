@@ -2,6 +2,7 @@
 
 import { getAppsAction } from '@/app/actions/app';
 import ButtonGroup from '@/app/components/ui/ButtonGroup';
+import Spinner from '@/app/components/ui/Spinner';
 import { formatDate } from '@/app/lib/formatDate';
 import { removeDebugInfo } from '@/app/lib/helpers';
 import { AppTypes } from '@/app/types/appTypes';
@@ -10,15 +11,24 @@ import { useEffect, useState } from 'react';
 
 export default function Dashboard() {
   const [apps, setApps] = useState<AppTypes>([]);
+  const [loading, setLoading] = useState(false);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
     (async () => {
+      setLoading(true);
       const getApps = await getAppsAction();
       const clean = removeDebugInfo(getApps);
       setApps(clean);
+      setLoading(false);
       // console.log(removeDebugInfo(getApps));
     })();
-  }, []);
+  }, [reload]);
+
+  const dispatch = {
+    reload,
+    setReload,
+  };
 
   return (
     <>
@@ -40,48 +50,54 @@ export default function Dashboard() {
             {/* <div className="card-footer d-flex justify-content-end"></div> */}
           </div>
         </div>
-        <div className="col-md-12">
-          <div className="card ">
-            <div className="card-header"></div>
-            <div className="card-body">
-              <div className="table-responsive-md">
-                <table className="table tablesorter">
-                  {' '}
-                  <thead className=" text-primary">
-                    <tr>
-                      <th>App Name</th>
-                      <th>Description</th>
-                      <th>URL</th>
-                      <th className="text-center">Created At</th>
-                      <th></th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {apps.length > 0 &&
-                      apps.map((item, index) => (
-                        <tr key={index}>
-                          <td>{item.appName}</td>
-                          <td>{item.description}</td>
-                          <td>
-                            {/* <span className="badge bg-success text-dark">
-                                <span className="fs-11">RUNNING</span>
-                              </span> */}
-                            {item.url}
-                          </td>
-                          <td className="text-center">
-                            {formatDate(item.createdAt, 'YYYY-MM-DD')}
-                          </td>
-                          <td>
-                            <ButtonGroup id={item.id} />
-                          </td>
-                        </tr>
-                      ))}
-                  </tbody>
-                </table>
+
+        {loading ? (
+          <div className="col-12 mt-3">
+            <Spinner size={100} />
+          </div>
+        ) : (
+          <div className="col-md-12">
+            <div className="card ">
+              <div className="card-header"></div>
+              <div className="card-body">
+                <div className="table-responsive-md">
+                  <table className="table tablesorter">
+                    <thead className=" text-primary">
+                      <tr>
+                        <th>App Name</th>
+                        <th>Description</th>
+                        <th>URL</th>
+                        <th className="text-center">Created At</th>
+                        <th></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {apps.length > 0 &&
+                        apps.map((item, index) => (
+                          <tr key={index}>
+                            <td>{item.appName}</td>
+                            <td>{item.description}</td>
+                            <td>
+                              {/* <span className="badge bg-success text-dark">
+                               <span className="fs-11">RUNNING</span>
+                             </span> */}
+                              {item.url}
+                            </td>
+                            <td className="text-center">
+                              {formatDate(item.createdAt, 'YYYY-MM-DD')}
+                            </td>
+                            <td>
+                              <ButtonGroup id={item.id} dispatch={dispatch} />
+                            </td>
+                          </tr>
+                        ))}
+                    </tbody>
+                  </table>
+                </div>
               </div>
             </div>
           </div>
-        </div>
+        )}
       </div>
     </>
   );

@@ -13,10 +13,24 @@ import {
   FaTrashCan,
 } from 'react-icons/fa6';
 import Dropdown from 'react-bootstrap/Dropdown';
+import { useDeleteWithAlert } from '@/app/hooks/useDeleteWithAlert';
+import { useRouter } from 'next/navigation';
 
-type ButtonGroupProps = { id: string };
+type ButtonGroupProps = {
+  id: string;
+  dispatch: { setReload: (v: boolean) => void; reload: boolean };
+};
 
-export default function ButtonGroup({ id }: ButtonGroupProps) {
+export default function ButtonGroup({ id, dispatch }: ButtonGroupProps) {
+  const { showAlert, isDeleting } = useDeleteWithAlert();
+
+  const router = useRouter();
+
+  const handleDelete = async () => {
+    await showAlert(id);
+    dispatch.setReload(!dispatch.reload);
+  };
+
   return (
     <div className="d-flex justify-content-end">
       <Dropdown className="right-dropdown">
@@ -49,7 +63,11 @@ export default function ButtonGroup({ id }: ButtonGroupProps) {
             <FaCopy size={16} className="mr-2 ml-n1" /> Copy
           </Dropdown.Item>
 
-          <Dropdown.Item href="#" className="mt-n1 mb-n1 mr-n3 d-flex align-items-center">
+          <Dropdown.Item
+            href="#"
+            className="mt-n1 mb-n1 mr-n3 d-flex align-items-center"
+            onClick={() => handleDelete()}
+          >
             <FaTrash size={16} className="mr-2 ml-n1" /> Delete
           </Dropdown.Item>
         </Dropdown.Menu>

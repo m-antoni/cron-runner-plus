@@ -11,24 +11,29 @@ import { useAppInfoForm } from '@/app/hooks/useAppInfoForm';
 import { useSaveForm } from '@/app/hooks/useSaveForm';
 import Spinner from '@/app/components/ui/Spinner';
 import AlertMessage from '@/app/components/ui/AlertMessage';
-import { AppFormProps, AppTypes } from '@/app/types/appTypes';
-import { notFound, useParams, usePathname } from 'next/navigation';
-import { getSingleAppAction } from '@/app/actions/app';
+import { useParams, useRouter } from 'next/navigation';
+import { deleteAppAction, getSingleAppAction } from '@/app/actions/app';
+import { useDeleteWithAlert } from '@/app/hooks/useDeleteWithAlert';
 
 export default function ViewDetails() {
+  const [_loading, _setLoading] = useState(false);
   // custom hooks
   const appInfoForm = useAppInfoForm();
   const envForm = useEnvForm();
   const { saveForm, loading, errors } = useSaveForm();
+  const { showAlert, isDeleting } = useDeleteWithAlert();
+
   const { id } = useParams();
 
   useEffect(() => {
     // invoke function
     (async () => {
+      _setLoading(true);
       const getApp = await getSingleAppAction(id as string);
       if (getApp) {
         appInfoForm.setAppInfo(getApp);
         envForm.setEnv(getApp.env);
+        _setLoading(false);
       }
     })();
   }, []);
@@ -56,14 +61,18 @@ export default function ViewDetails() {
               <div>
                 <Button
                   variant="warning"
-                  className="px-3 mr-2"
+                  className="px-3 mr-3"
                   onClick={handleSave}
                   disabled={loading}
                 >
-                  {loading ? <Spinner text="Saving..." /> : `Save`}
+                  {loading ? <Spinner text="Saving..." size={19} /> : `Save`}
                 </Button>
-                <Link href={'/dashboard'} className="btn btn-secondary px-3">
-                  Cancel
+                <Link
+                  href="#"
+                  className="btn btn-secondary px-3"
+                  onClick={() => showAlert(id as string)}
+                >
+                  Delete
                 </Link>
               </div>
             </div>
@@ -75,20 +84,29 @@ export default function ViewDetails() {
           <AlertMessage errors={errors.filter((err) => err)} />
         )}
       </div>
-      <div className="col-md-12">
-        <div className="card">
-          <div className="card-body">
-            <AppForm {...appInfoForm} />
-          </div>
+      {_loading ? (
+        <div className="col-md-12 mt-3">
+          <Spinner size={100} />
         </div>
-      </div>
-      <div className="col-md-12">
-        <div className="card">
-          <div className="card-body">
-            <EnvForm {...envForm} />
+      ) : (
+        <>
+          {' '}
+          <div className="col-md-12">
+            <div className="card">
+              <div className="card-body">
+                <AppForm {...appInfoForm} />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
+          <div className="col-md-12">
+            <div className="card">
+              <div className="card-body">
+                <EnvForm {...envForm} />
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 }

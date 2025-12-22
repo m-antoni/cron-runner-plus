@@ -82,9 +82,6 @@ export async function updateAppAction(
     env: { envKey: string; envValue: string }[];
   },
 ) {
-  console.log(id);
-  console.log(data);
-  //   return;
   try {
     // restructure a new envData without the appId and Id
     const envData = data.env.map(({ envKey, envValue }) => ({ envKey, envValue }));

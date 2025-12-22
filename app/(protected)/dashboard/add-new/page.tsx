@@ -42,14 +42,14 @@ export default function AddNew() {
               <div>
                 <Button
                   variant="warning"
-                  className="px-3 mr-2"
+                  className="px-3 mr-3"
                   onClick={() => handleSave()}
                   disabled={loading}
                 >
-                  {loading ? <Spinner text="Saving..." /> : `Save`}
+                  {loading ? <Spinner text="Saving..." size={19} /> : `Save`}
                 </Button>
-                <Link href={'/dashboard'} className="btn btn-secondary px-3">
-                  Cancel
+                <Link href="#" className="btn btn-secondary px-3">
+                  Clear
                 </Link>
               </div>
             </div>

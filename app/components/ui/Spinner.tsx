@@ -11,11 +11,12 @@ import {
 import { CSSProperties } from 'react';
 
 type SpinnerProps = {
-  text: string;
+  text?: string;
   color?: string;
+  size?: number;
 };
 
-export default function Spinner({ text = 'Loading...', color = '#ffffff' }: SpinnerProps) {
+export default function Spinner({ text, color = '#ffffff', size }: SpinnerProps) {
   // spinnder style override
   const override: CSSProperties = {
     display: 'block',
@@ -30,7 +31,7 @@ export default function Spinner({ text = 'Loading...', color = '#ffffff' }: Spin
           color={color}
           loading={true}
           cssOverride={override}
-          size={19}
+          size={size}
           aria-label="Loading Spinner"
           data-testid="loader"
         />
