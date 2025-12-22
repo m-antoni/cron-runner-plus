@@ -1,14 +1,16 @@
-# Ignore Bootstrap and CSS libraries from language stats
-assets/css/** linguist-vendored
-public/css/** linguist-vendored
-vendor/** linguist-vendored
+# Ignore the Next.js build output
+.next/** linguist-vendored
 
-# Specifically target minified and library files if they are loose
+# Ignore standard CSS/SASS folders
+styles/** linguist-vendored
+public/** linguist-vendored
+
+# Ignore specific large library files
+*.css linguist-vendored
+*.scss linguist-vendored
 *.min.css linguist-vendored
-*.css.map linguist-vendored
-bootstrap* linguist-vendored
 
-# Force GitHub to prioritize your actual logic
+# Ensure TS/JS is detected
 *.ts linguist-detectable=true
 *.tsx linguist-detectable=true
 *.js linguist-detectable=true
