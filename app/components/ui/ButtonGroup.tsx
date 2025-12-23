@@ -35,7 +35,7 @@ export default function ButtonGroup({ id, dispatch, env }: ButtonGroupProps) {
         <Dropdown.Menu className="dropdown-navbar ml-3">
           <Dropdown.Item
             as={Link}
-            href={`/dashboard/${id}/view`}
+            href={`/cronlabs/${id}/view`}
             className="mt-n1 mb-n1 mr-n3 d-flex align-items-center"
           >
             <FaEye size={16} className="mr-2 ml-n1" /> View

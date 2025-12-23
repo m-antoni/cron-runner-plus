@@ -35,14 +35,14 @@ export default function AddNew() {
           <div className="card-body">
             <div className="d-flex justify-content-between">
               <div>
-                <Link href={`/dashboard`} className="btn btn-secondary px-3">
+                <Link href={`/cronlabs`} className="btn btn-secondary px-3">
                   <FaArrowLeft /> Back
                 </Link>
               </div>
               <div>
                 <Button
                   variant="warning"
-                  className="px-3 mr-3"
+                  className="px-3 "
                   onClick={() => handleSave()}
                   disabled={loading}
                 >

@@ -58,7 +58,7 @@ export function useSaveForm() {
     setLoading(false);
 
     if (result.success) {
-      router.push('/dashboard');
+      router.push('/cronlabs');
     } else {
       alert('Error: ' + result.error);
     }

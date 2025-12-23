@@ -41,7 +41,7 @@ export function useDeleteWithAlert() {
           showConfirmButton: false,
         });
 
-        router.push('/dashboard');
+        router.push('/cronlabs');
       } catch (error) {
         console.error(error);
         Swal.fire('Error', 'Something went wrong.', 'error');

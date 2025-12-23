@@ -57,6 +57,7 @@ export default function Spinner({
         width={width || size / 5}
         radius={2}
         aria-label="Loading Spinner"
+        className="mr-2"
       />
       {text && (
         <span className="ms-2" style={{ color }}>

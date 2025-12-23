@@ -2,8 +2,8 @@
 
 import { FaMagnifyingGlass, FaBell } from 'react-icons/fa6';
 import { usePathname } from 'next/navigation';
-import { auth } from '../lib/auth';
 import { signOutProvider } from '../actions/auth';
+import ProfileImage from '@/app/components/ui/ProfileImage';
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -93,6 +93,7 @@ export default function Navbar() {
                 <a href="#" className="dropdown-toggle nav-link" data-toggle="dropdown">
                   <div className="photo">
                     <img src="/assets/img/anime3.png" alt="Profile Photo" />
+                    {/* <ProfileImage /> */}
                   </div>
                   <b className="caret d-none d-lg-block d-xl-block" />
                   <p className="d-lg-none">Log out</p>

@@ -9,7 +9,7 @@ import { AppTypes } from '@/app/types/appTypes';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-export default function Dashboard() {
+export default function Cronlabs() {
   const [apps, setApps] = useState<AppTypes>([]);
   const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(false);
@@ -43,7 +43,7 @@ export default function Dashboard() {
                   <h4 className="card-title"> List of Applications</h4>
                 </div>
                 <div>
-                  <Link href={'/dashboard/add-new'} className="btn btn-warning px-3">
+                  <Link href={'/cronlabs/add-new'} className="btn btn-warning px-3">
                     Add New
                   </Link>
                 </div>

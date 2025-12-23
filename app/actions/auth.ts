@@ -3,14 +3,14 @@
 import { signIn, signOut } from '@/app/lib/auth';
 
 export const signInWithGoogle = async () => {
-  await signIn('google', { redirectTo: '/dashboard' });
+  await signIn('google', { redirectTo: '/cronlabs' });
 };
 
 export const signInWithGithub = async () => {
-  await signIn('github', { redirectTo: '/dashboard' });
+  await signIn('github', { redirectTo: '/cronlabs' });
 };
 export const signInWithFacebook = async () => {
-  await signIn('facebook', { redirectTo: '/dashboard' });
+  await signIn('facebook', { redirectTo: '/cronlabs' });
 };
 
 export const signOutProvider = async () => {

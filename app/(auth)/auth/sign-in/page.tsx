@@ -40,7 +40,7 @@ export default function LoginPage() {
             className="mb-4"
           />
           <p className="text-secondary mb-0" style={{ fontSize: '0.95rem' }}>
-            Sign in with your Social account
+            Sign in with your social account.
           </p>
         </div>
 
