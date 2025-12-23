@@ -1,10 +1,10 @@
 'use server';
 
 import { prisma } from '@/app/lib/prisma';
+import { auth } from '@/app/lib/auth'; // Adjust this path to your auth.ts
 import { revalidatePath } from 'next/cache';
 
 // ** --- CREATE ---
-// Saves a new app and its associated environment variables array
 export async function createAppAction(data: {
   appName: string;
   url: string;
@@ -14,6 +14,10 @@ export async function createAppAction(data: {
   env: { envKey: string; envValue: string }[];
 }) {
   try {
+    // 1. Get the current user session
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'Unauthorized' };
+
     const result = await prisma.app.create({
       data: {
         appName: data.appName,
@@ -21,14 +25,16 @@ export async function createAppAction(data: {
         technology: data.technology,
         github: data.github,
         description: data.description,
+        // 2. Link the app to the logged-in user
+        userId: session.user.id,
         env: {
-          create: data.env, // Automatically maps the array to the EnvVar table
+          create: data.env,
         },
       },
-      include: { env: true }, // Returns the new app with its variables
+      include: { env: true },
     });
 
-    revalidatePath('/'); // Updates the UI instantly
+    revalidatePath('/');
     return { success: true, data: result };
   } catch (error) {
     console.error('Create Error:', error);
@@ -37,41 +43,50 @@ export async function createAppAction(data: {
 }
 
 // ** --- READ ---
-// Fetches all apps and "includes" their environment variables
 export async function getAppsAction() {
   try {
-    const app = await prisma.app.findMany({
+    // 1. Get the current user session
+    const session = await auth();
+    if (!session?.user?.id) return [];
+
+    const apps = await prisma.app.findMany({
+      // 2. Filter so the user ONLY sees their own apps
+      where: { userId: session.user.id },
       include: { env: true },
       skip: 0,
       take: 20,
       orderBy: { createdAt: 'desc' },
     });
-    return app;
+    return apps;
   } catch (error) {
-    console.error('Create Error:', error);
-    return { success: false, error: 'Failed to create app' };
+    console.error('Fetch Error:', error);
+    return [];
   }
 }
 
 // ** --- READ (SINGLE) ---
-// Fetches one app by its ID, including all its environment variables
 export async function getSingleAppAction(id: string) {
   try {
+    const session = await auth();
+    if (!session?.user?.id) return null;
+
     const app = await prisma.app.findUnique({
-      where: { id },
-      include: { env: true }, // This ensures your envArray is populate
+      where: {
+        id,
+        // 2. Security: Ensure the user owns the app they are trying to view
+        userId: session.user.id,
+      },
+      include: { env: true },
     });
 
-    if (!app) return null;
-    return app;
+    return app || null;
   } catch (error) {
     console.error('Error fetching app:', error);
-    throw new Error('Could not find the requested application.');
+    return null;
   }
 }
 
 // ** --- UPDATE ---
-// Deletes existing variables and re-inserts new ones to sync the UI state
 export async function updateAppAction(
   id: string,
   data: {
@@ -84,11 +99,17 @@ export async function updateAppAction(
   },
 ) {
   try {
-    // restructure a new envData without the appId and Id
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'Unauthorized' };
+
     const envData = data.env.map(({ envKey, envValue }) => ({ envKey, envValue }));
 
     const result = await prisma.app.update({
-      where: { id },
+      where: {
+        id,
+        // 2. Security: Prevent updating apps that don't belong to you
+        userId: session.user.id,
+      },
       data: {
         appName: data.appName,
         url: data.url,
@@ -96,7 +117,7 @@ export async function updateAppAction(
         github: data.github,
         description: data.description,
         env: {
-          deleteMany: {}, // remove existing env vars
+          deleteMany: {},
           create: envData,
         },
       },
@@ -114,11 +135,21 @@ export async function updateAppAction(
 // ** --- DELETE ---
 export async function deleteAppAction(id: string) {
   try {
-    await prisma.app.delete({ where: { id } });
+    const session = await auth();
+    if (!session?.user?.id) return { success: false, error: 'Unauthorized' };
+
+    await prisma.app.delete({
+      where: {
+        id,
+        // 2. Security: Prevent deleting apps that don't belong to you
+        userId: session.user.id,
+      },
+    });
+
     revalidatePath('/');
     return { success: true };
   } catch (error) {
-    console.error('Update Error:', error);
-    return { success: false, error: 'Failed to update app' };
+    console.error('Delete Error:', error);
+    return { success: false, error: 'Failed to delete app' };
   }
 }

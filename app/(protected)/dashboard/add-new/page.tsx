@@ -48,9 +48,9 @@ export default function AddNew() {
                 >
                   {loading ? <Spinner text="Saving..." size={19} /> : `Save`}
                 </Button>
-                <Link href="#" className="btn btn-secondary px-3">
+                {/* <Link href="#" className="btn btn-secondary px-3">
                   Clear
-                </Link>
+                </Link> */}
               </div>
             </div>
           </div>

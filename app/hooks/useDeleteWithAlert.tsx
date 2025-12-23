@@ -50,7 +50,9 @@ export function useDeleteWithAlert() {
       }
 
       // ** Reload the page, get API new list
-      dispatch?.reload && dispatch.setReload(!dispatch.reload);
+      if (dispatch) {
+        dispatch.setReload(!dispatch.reload);
+      }
     }
   };
 

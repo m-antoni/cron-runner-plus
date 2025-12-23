@@ -2,10 +2,11 @@
 
 import { FaMagnifyingGlass, FaBell } from 'react-icons/fa6';
 import { usePathname } from 'next/navigation';
+import { auth } from '../lib/auth';
+import { signOutProvider } from '../actions/auth';
 
 export default function Navbar() {
   const pathname = usePathname();
-
   const currentPage = pathname.split('/')[1];
 
   return (
@@ -109,7 +110,11 @@ export default function Navbar() {
                   </li>
                   <li className="dropdown-divider" />
                   <li className="nav-link">
-                    <a href="javascript:void(0)" className="nav-item dropdown-item">
+                    <a
+                      href="javascript:void(0)"
+                      className="nav-item dropdown-item"
+                      onClick={() => signOutProvider()}
+                    >
                       Log out
                     </a>
                   </li>

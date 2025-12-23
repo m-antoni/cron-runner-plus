@@ -31,6 +31,7 @@ export type AppMinAggregateOutputType = {
   technology: string | null
   github: string | null
   description: string | null
+  userId: string | null
   createdAt: Date | null
 }
 
@@ -41,6 +42,7 @@ export type AppMaxAggregateOutputType = {
   technology: string | null
   github: string | null
   description: string | null
+  userId: string | null
   createdAt: Date | null
 }
 
@@ -51,6 +53,7 @@ export type AppCountAggregateOutputType = {
   technology: number
   github: number
   description: number
+  userId: number
   createdAt: number
   _all: number
 }
@@ -63,6 +66,7 @@ export type AppMinAggregateInputType = {
   technology?: true
   github?: true
   description?: true
+  userId?: true
   createdAt?: true
 }
 
@@ -73,6 +77,7 @@ export type AppMaxAggregateInputType = {
   technology?: true
   github?: true
   description?: true
+  userId?: true
   createdAt?: true
 }
 
@@ -83,6 +88,7 @@ export type AppCountAggregateInputType = {
   technology?: true
   github?: true
   description?: true
+  userId?: true
   createdAt?: true
   _all?: true
 }
@@ -166,6 +172,7 @@ export type AppGroupByOutputType = {
   technology: string
   github: string
   description: string
+  userId: string
   createdAt: Date
   _count: AppCountAggregateOutputType | null
   _min: AppMinAggregateOutputType | null
@@ -197,8 +204,10 @@ export type AppWhereInput = {
   technology?: Prisma.StringFilter<"App"> | string
   github?: Prisma.StringFilter<"App"> | string
   description?: Prisma.StringFilter<"App"> | string
+  userId?: Prisma.StringFilter<"App"> | string
   createdAt?: Prisma.DateTimeFilter<"App"> | Date | string
   env?: Prisma.EnvVarListRelationFilter
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }
 
 export type AppOrderByWithRelationInput = {
@@ -208,8 +217,10 @@ export type AppOrderByWithRelationInput = {
   technology?: Prisma.SortOrder
   github?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   env?: Prisma.EnvVarOrderByRelationAggregateInput
+  user?: Prisma.UserOrderByWithRelationInput
 }
 
 export type AppWhereUniqueInput = Prisma.AtLeast<{
@@ -222,8 +233,10 @@ export type AppWhereUniqueInput = Prisma.AtLeast<{
   technology?: Prisma.StringFilter<"App"> | string
   github?: Prisma.StringFilter<"App"> | string
   description?: Prisma.StringFilter<"App"> | string
+  userId?: Prisma.StringFilter<"App"> | string
   createdAt?: Prisma.DateTimeFilter<"App"> | Date | string
   env?: Prisma.EnvVarListRelationFilter
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
 }, "id">
 
 export type AppOrderByWithAggregationInput = {
@@ -233,6 +246,7 @@ export type AppOrderByWithAggregationInput = {
   technology?: Prisma.SortOrder
   github?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   _count?: Prisma.AppCountOrderByAggregateInput
   _max?: Prisma.AppMaxOrderByAggregateInput
@@ -249,6 +263,7 @@ export type AppScalarWhereWithAggregatesInput = {
   technology?: Prisma.StringWithAggregatesFilter<"App"> | string
   github?: Prisma.StringWithAggregatesFilter<"App"> | string
   description?: Prisma.StringWithAggregatesFilter<"App"> | string
+  userId?: Prisma.StringWithAggregatesFilter<"App"> | string
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"App"> | Date | string
 }
 
@@ -261,6 +276,7 @@ export type AppCreateInput = {
   description: string
   createdAt?: Date | string
   env?: Prisma.EnvVarCreateNestedManyWithoutAppInput
+  user: Prisma.UserCreateNestedOneWithoutAppsInput
 }
 
 export type AppUncheckedCreateInput = {
@@ -270,6 +286,7 @@ export type AppUncheckedCreateInput = {
   technology: string
   github: string
   description: string
+  userId: string
   createdAt?: Date | string
   env?: Prisma.EnvVarUncheckedCreateNestedManyWithoutAppInput
 }
@@ -283,6 +300,7 @@ export type AppUpdateInput = {
   description?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   env?: Prisma.EnvVarUpdateManyWithoutAppNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutAppsNestedInput
 }
 
 export type AppUncheckedUpdateInput = {
@@ -292,6 +310,7 @@ export type AppUncheckedUpdateInput = {
   technology?: Prisma.StringFieldUpdateOperationsInput | string
   github?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   env?: Prisma.EnvVarUncheckedUpdateManyWithoutAppNestedInput
 }
@@ -303,6 +322,7 @@ export type AppCreateManyInput = {
   technology: string
   github: string
   description: string
+  userId: string
   createdAt?: Date | string
 }
 
@@ -323,7 +343,18 @@ export type AppUncheckedUpdateManyInput = {
   technology?: Prisma.StringFieldUpdateOperationsInput | string
   github?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AppListRelationFilter = {
+  every?: Prisma.AppWhereInput
+  some?: Prisma.AppWhereInput
+  none?: Prisma.AppWhereInput
+}
+
+export type AppOrderByRelationAggregateInput = {
+  _count?: Prisma.SortOrder
 }
 
 export type AppCountOrderByAggregateInput = {
@@ -333,6 +364,7 @@ export type AppCountOrderByAggregateInput = {
   technology?: Prisma.SortOrder
   github?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -343,6 +375,7 @@ export type AppMaxOrderByAggregateInput = {
   technology?: Prisma.SortOrder
   github?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -353,6 +386,7 @@ export type AppMinOrderByAggregateInput = {
   technology?: Prisma.SortOrder
   github?: Prisma.SortOrder
   description?: Prisma.SortOrder
+  userId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
 }
 
@@ -361,12 +395,46 @@ export type AppScalarRelationFilter = {
   isNot?: Prisma.AppWhereInput
 }
 
-export type StringFieldUpdateOperationsInput = {
-  set?: string
+export type AppCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.AppCreateWithoutUserInput, Prisma.AppUncheckedCreateWithoutUserInput> | Prisma.AppCreateWithoutUserInput[] | Prisma.AppUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.AppCreateOrConnectWithoutUserInput | Prisma.AppCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.AppCreateManyUserInputEnvelope
+  connect?: Prisma.AppWhereUniqueInput | Prisma.AppWhereUniqueInput[]
 }
 
-export type DateTimeFieldUpdateOperationsInput = {
-  set?: Date | string
+export type AppUncheckedCreateNestedManyWithoutUserInput = {
+  create?: Prisma.XOR<Prisma.AppCreateWithoutUserInput, Prisma.AppUncheckedCreateWithoutUserInput> | Prisma.AppCreateWithoutUserInput[] | Prisma.AppUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.AppCreateOrConnectWithoutUserInput | Prisma.AppCreateOrConnectWithoutUserInput[]
+  createMany?: Prisma.AppCreateManyUserInputEnvelope
+  connect?: Prisma.AppWhereUniqueInput | Prisma.AppWhereUniqueInput[]
+}
+
+export type AppUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.AppCreateWithoutUserInput, Prisma.AppUncheckedCreateWithoutUserInput> | Prisma.AppCreateWithoutUserInput[] | Prisma.AppUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.AppCreateOrConnectWithoutUserInput | Prisma.AppCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.AppUpsertWithWhereUniqueWithoutUserInput | Prisma.AppUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.AppCreateManyUserInputEnvelope
+  set?: Prisma.AppWhereUniqueInput | Prisma.AppWhereUniqueInput[]
+  disconnect?: Prisma.AppWhereUniqueInput | Prisma.AppWhereUniqueInput[]
+  delete?: Prisma.AppWhereUniqueInput | Prisma.AppWhereUniqueInput[]
+  connect?: Prisma.AppWhereUniqueInput | Prisma.AppWhereUniqueInput[]
+  update?: Prisma.AppUpdateWithWhereUniqueWithoutUserInput | Prisma.AppUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.AppUpdateManyWithWhereWithoutUserInput | Prisma.AppUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.AppScalarWhereInput | Prisma.AppScalarWhereInput[]
+}
+
+export type AppUncheckedUpdateManyWithoutUserNestedInput = {
+  create?: Prisma.XOR<Prisma.AppCreateWithoutUserInput, Prisma.AppUncheckedCreateWithoutUserInput> | Prisma.AppCreateWithoutUserInput[] | Prisma.AppUncheckedCreateWithoutUserInput[]
+  connectOrCreate?: Prisma.AppCreateOrConnectWithoutUserInput | Prisma.AppCreateOrConnectWithoutUserInput[]
+  upsert?: Prisma.AppUpsertWithWhereUniqueWithoutUserInput | Prisma.AppUpsertWithWhereUniqueWithoutUserInput[]
+  createMany?: Prisma.AppCreateManyUserInputEnvelope
+  set?: Prisma.AppWhereUniqueInput | Prisma.AppWhereUniqueInput[]
+  disconnect?: Prisma.AppWhereUniqueInput | Prisma.AppWhereUniqueInput[]
+  delete?: Prisma.AppWhereUniqueInput | Prisma.AppWhereUniqueInput[]
+  connect?: Prisma.AppWhereUniqueInput | Prisma.AppWhereUniqueInput[]
+  update?: Prisma.AppUpdateWithWhereUniqueWithoutUserInput | Prisma.AppUpdateWithWhereUniqueWithoutUserInput[]
+  updateMany?: Prisma.AppUpdateManyWithWhereWithoutUserInput | Prisma.AppUpdateManyWithWhereWithoutUserInput[]
+  deleteMany?: Prisma.AppScalarWhereInput | Prisma.AppScalarWhereInput[]
 }
 
 export type AppCreateNestedOneWithoutEnvInput = {
@@ -383,6 +451,68 @@ export type AppUpdateOneRequiredWithoutEnvNestedInput = {
   update?: Prisma.XOR<Prisma.XOR<Prisma.AppUpdateToOneWithWhereWithoutEnvInput, Prisma.AppUpdateWithoutEnvInput>, Prisma.AppUncheckedUpdateWithoutEnvInput>
 }
 
+export type AppCreateWithoutUserInput = {
+  id?: string
+  appName: string
+  url: string
+  technology: string
+  github: string
+  description: string
+  createdAt?: Date | string
+  env?: Prisma.EnvVarCreateNestedManyWithoutAppInput
+}
+
+export type AppUncheckedCreateWithoutUserInput = {
+  id?: string
+  appName: string
+  url: string
+  technology: string
+  github: string
+  description: string
+  createdAt?: Date | string
+  env?: Prisma.EnvVarUncheckedCreateNestedManyWithoutAppInput
+}
+
+export type AppCreateOrConnectWithoutUserInput = {
+  where: Prisma.AppWhereUniqueInput
+  create: Prisma.XOR<Prisma.AppCreateWithoutUserInput, Prisma.AppUncheckedCreateWithoutUserInput>
+}
+
+export type AppCreateManyUserInputEnvelope = {
+  data: Prisma.AppCreateManyUserInput | Prisma.AppCreateManyUserInput[]
+  skipDuplicates?: boolean
+}
+
+export type AppUpsertWithWhereUniqueWithoutUserInput = {
+  where: Prisma.AppWhereUniqueInput
+  update: Prisma.XOR<Prisma.AppUpdateWithoutUserInput, Prisma.AppUncheckedUpdateWithoutUserInput>
+  create: Prisma.XOR<Prisma.AppCreateWithoutUserInput, Prisma.AppUncheckedCreateWithoutUserInput>
+}
+
+export type AppUpdateWithWhereUniqueWithoutUserInput = {
+  where: Prisma.AppWhereUniqueInput
+  data: Prisma.XOR<Prisma.AppUpdateWithoutUserInput, Prisma.AppUncheckedUpdateWithoutUserInput>
+}
+
+export type AppUpdateManyWithWhereWithoutUserInput = {
+  where: Prisma.AppScalarWhereInput
+  data: Prisma.XOR<Prisma.AppUpdateManyMutationInput, Prisma.AppUncheckedUpdateManyWithoutUserInput>
+}
+
+export type AppScalarWhereInput = {
+  AND?: Prisma.AppScalarWhereInput | Prisma.AppScalarWhereInput[]
+  OR?: Prisma.AppScalarWhereInput[]
+  NOT?: Prisma.AppScalarWhereInput | Prisma.AppScalarWhereInput[]
+  id?: Prisma.StringFilter<"App"> | string
+  appName?: Prisma.StringFilter<"App"> | string
+  url?: Prisma.StringFilter<"App"> | string
+  technology?: Prisma.StringFilter<"App"> | string
+  github?: Prisma.StringFilter<"App"> | string
+  description?: Prisma.StringFilter<"App"> | string
+  userId?: Prisma.StringFilter<"App"> | string
+  createdAt?: Prisma.DateTimeFilter<"App"> | Date | string
+}
+
 export type AppCreateWithoutEnvInput = {
   id?: string
   appName: string
@@ -391,6 +521,7 @@ export type AppCreateWithoutEnvInput = {
   github: string
   description: string
   createdAt?: Date | string
+  user: Prisma.UserCreateNestedOneWithoutAppsInput
 }
 
 export type AppUncheckedCreateWithoutEnvInput = {
@@ -400,6 +531,7 @@ export type AppUncheckedCreateWithoutEnvInput = {
   technology: string
   github: string
   description: string
+  userId: string
   createdAt?: Date | string
 }
 
@@ -427,9 +559,53 @@ export type AppUpdateWithoutEnvInput = {
   github?: Prisma.StringFieldUpdateOperationsInput | string
   description?: Prisma.StringFieldUpdateOperationsInput | string
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  user?: Prisma.UserUpdateOneRequiredWithoutAppsNestedInput
 }
 
 export type AppUncheckedUpdateWithoutEnvInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  appName?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  technology?: Prisma.StringFieldUpdateOperationsInput | string
+  github?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  userId?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+}
+
+export type AppCreateManyUserInput = {
+  id?: string
+  appName: string
+  url: string
+  technology: string
+  github: string
+  description: string
+  createdAt?: Date | string
+}
+
+export type AppUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  appName?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  technology?: Prisma.StringFieldUpdateOperationsInput | string
+  github?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  env?: Prisma.EnvVarUpdateManyWithoutAppNestedInput
+}
+
+export type AppUncheckedUpdateWithoutUserInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  appName?: Prisma.StringFieldUpdateOperationsInput | string
+  url?: Prisma.StringFieldUpdateOperationsInput | string
+  technology?: Prisma.StringFieldUpdateOperationsInput | string
+  github?: Prisma.StringFieldUpdateOperationsInput | string
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  env?: Prisma.EnvVarUncheckedUpdateManyWithoutAppNestedInput
+}
+
+export type AppUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   appName?: Prisma.StringFieldUpdateOperationsInput | string
   url?: Prisma.StringFieldUpdateOperationsInput | string
@@ -477,8 +653,10 @@ export type AppSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = ru
   technology?: boolean
   github?: boolean
   description?: boolean
+  userId?: boolean
   createdAt?: boolean
   env?: boolean | Prisma.App$envArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.AppCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["app"]>
 
@@ -489,7 +667,9 @@ export type AppSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extension
   technology?: boolean
   github?: boolean
   description?: boolean
+  userId?: boolean
   createdAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["app"]>
 
 export type AppSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -499,7 +679,9 @@ export type AppSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extension
   technology?: boolean
   github?: boolean
   description?: boolean
+  userId?: boolean
   createdAt?: boolean
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["app"]>
 
 export type AppSelectScalar = {
@@ -509,21 +691,28 @@ export type AppSelectScalar = {
   technology?: boolean
   github?: boolean
   description?: boolean
+  userId?: boolean
   createdAt?: boolean
 }
 
-export type AppOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "appName" | "url" | "technology" | "github" | "description" | "createdAt", ExtArgs["result"]["app"]>
+export type AppOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "appName" | "url" | "technology" | "github" | "description" | "userId" | "createdAt", ExtArgs["result"]["app"]>
 export type AppInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   env?: boolean | Prisma.App$envArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   _count?: boolean | Prisma.AppCountOutputTypeDefaultArgs<ExtArgs>
 }
-export type AppIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
-export type AppIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {}
+export type AppIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
+export type AppIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+}
 
 export type $AppPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "App"
   objects: {
     env: Prisma.$EnvVarPayload<ExtArgs>[]
+    user: Prisma.$UserPayload<ExtArgs>
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -532,6 +721,7 @@ export type $AppPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
     technology: string
     github: string
     description: string
+    userId: string
     createdAt: Date
   }, ExtArgs["result"]["app"]>
   composites: {}
@@ -928,6 +1118,7 @@ readonly fields: AppFieldRefs;
 export interface Prisma__AppClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   env<T extends Prisma.App$envArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.App$envArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$EnvVarPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -963,6 +1154,7 @@ export interface AppFieldRefs {
   readonly technology: Prisma.FieldRef<"App", 'String'>
   readonly github: Prisma.FieldRef<"App", 'String'>
   readonly description: Prisma.FieldRef<"App", 'String'>
+  readonly userId: Prisma.FieldRef<"App", 'String'>
   readonly createdAt: Prisma.FieldRef<"App", 'DateTime'>
 }
     
@@ -1213,6 +1405,10 @@ export type AppCreateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.
    */
   data: Prisma.AppCreateManyInput | Prisma.AppCreateManyInput[]
   skipDuplicates?: boolean
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AppIncludeCreateManyAndReturn<ExtArgs> | null
 }
 
 /**
@@ -1283,6 +1479,10 @@ export type AppUpdateManyAndReturnArgs<ExtArgs extends runtime.Types.Extensions.
    * Limit how many Apps to update.
    */
   limit?: number
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.AppIncludeUpdateManyAndReturn<ExtArgs> | null
 }
 
 /**
