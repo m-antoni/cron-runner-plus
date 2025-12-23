@@ -10,22 +10,28 @@ export default function LoginPage() {
   const [loading, setLoading] = useState({ provider: '' });
 
   const signInHandler = async (provider: providerType) => {
-    switch (provider) {
-      case 'google':
-        await signInWithGoogle();
-        setLoading({ provider });
-        break;
-      case 'github':
-        await signInWithGithub();
-        setLoading({ provider });
+    if (!provider) return;
 
-        break;
-      case 'facebook':
-        await signInWithFacebook();
-        setLoading({ provider });
-        break;
-      default:
-        break;
+    // set loading
+    setLoading({ provider });
+    try {
+      switch (provider) {
+        case 'google':
+          await signInWithGoogle();
+          break;
+        case 'github':
+          await signInWithGithub();
+          break;
+        case 'facebook':
+          await signInWithFacebook();
+          break;
+        default:
+          setLoading({ provider: '' });
+          break;
+      }
+    } catch (error) {
+      console.log(error);
+      setLoading({ provider: '' });
     }
   };
 
@@ -48,9 +54,9 @@ export default function LoginPage() {
           {/* Added 'me-3' class to all images for icon spacing */}
           <button
             onClick={() => signInHandler('google')}
-            className="btn oauth-btn d-flex align-items-center justify-content-center py-3 w-100 mb-2"
+            className="btn oauth-btn d-flex align-items-center justify-content-center py-3 w-100 mb-2 px-100"
           >
-            {loading.provider === 'google' && <Spinner type="Scale" size={15} width={1} />}
+            {loading.provider === 'google' && <Spinner type="Scale" size={18} width={2} />}
             <img
               src="https://authjs.dev/img/providers/google.svg"
               width="24"
@@ -62,9 +68,9 @@ export default function LoginPage() {
 
           <button
             onClick={() => signInHandler('github')}
-            className="btn oauth-btn d-flex align-items-center justify-content-center py-3 w-100 mb-2"
+            className="btn oauth-btn d-flex align-items-center justify-content-center py-3 w-100 mb-2 px-100"
           >
-            {loading.provider === 'github' && <Spinner type="Scale" size={15} width={1} />}
+            {loading.provider === 'github' && <Spinner type="Scale" size={18} width={2} />}
             <img
               src="https://authjs.dev/img/providers/github.svg"
               width="24"
@@ -77,9 +83,9 @@ export default function LoginPage() {
 
           <button
             onClick={() => signInHandler('facebook')}
-            className="btn oauth-btn d-flex align-items-center justify-content-center py-3 w-100 mb-2"
+            className="btn oauth-btn d-flex align-items-center justify-content-center py-3 w-100 mb-2 px-100"
           >
-            {loading.provider === 'facebook' && <Spinner type="Scale" size={15} width={1} />}
+            {loading.provider === 'facebook' && <Spinner type="Scale" size={18} width={2} />}
             <img
               src="https://authjs.dev/img/providers/facebook.svg"
               width="24"
