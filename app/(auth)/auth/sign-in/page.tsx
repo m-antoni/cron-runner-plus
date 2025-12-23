@@ -51,18 +51,13 @@ export default function LoginPage() {
         </div>
 
         <div className="oauth-group d-grid w-100 mt-n4">
-          {/* Added 'me-3' class to all images for icon spacing */}
+          {/* Added 'me-2' class to all images for icon spacing */}
           <button
             onClick={() => signInHandler('google')}
             className="btn oauth-btn d-flex align-items-center justify-content-center py-3 w-100 mb-2 px-100"
           >
             {loading.provider === 'google' && <Spinner type="Scale" size={18} width={2} />}
-            <img
-              src="https://authjs.dev/img/providers/google.svg"
-              width="24"
-              alt="Google"
-              className="me-3"
-            />
+            <img src="https://authjs.dev/img/providers/google.svg" width="19" alt="Google" />
             <span className="fw-semibold btn-text">Continue with Google</span>
           </button>
 
@@ -73,10 +68,9 @@ export default function LoginPage() {
             {loading.provider === 'github' && <Spinner type="Scale" size={18} width={2} />}
             <img
               src="https://authjs.dev/img/providers/github.svg"
-              width="24"
+              width="19"
               alt="GitHub"
               style={{ filter: 'invert(1)' }}
-              className="me-3"
             />
             <span className="fw-semibold btn-text">Continue with GitHub</span>
           </button>
@@ -86,12 +80,7 @@ export default function LoginPage() {
             className="btn oauth-btn d-flex align-items-center justify-content-center py-3 w-100 mb-2 px-100"
           >
             {loading.provider === 'facebook' && <Spinner type="Scale" size={18} width={2} />}
-            <img
-              src="https://authjs.dev/img/providers/facebook.svg"
-              width="24"
-              alt="Facebook"
-              className="me-3"
-            />
+            <img src="https://authjs.dev/img/providers/facebook.svg" width="19" alt="Facebook" />
             <span className="fw-semibold btn-text">Continue with Facebook</span>
           </button>
         </div>
