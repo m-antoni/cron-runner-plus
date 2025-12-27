@@ -4,14 +4,18 @@ import { FaMagnifyingGlass, FaBell } from 'react-icons/fa6';
 import { usePathname } from 'next/navigation';
 import { signOutProvider } from '../actions/auth';
 import ProfileImage from '@/app/components/ui/ProfileImage';
+import { useUser } from '../hooks/useAuth';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const currentPage = pathname.split('/')[1];
+  const currentPage = pathname.split('/')[1] === 'cronlabs' ? 'Dashboard' : pathname.split('/')[1];
+
+  const { user } = useUser();
+
+  const userImage = user?.image ? user?.image : '/assets/img/anime3.png';
 
   return (
     <>
-      {/* Navbar */}
       <nav className="navbar navbar-expand-lg navbar-absolute navbar-transparent">
         <div className="container-fluid">
           <div className="navbar-wrapper">
@@ -58,6 +62,7 @@ export default function Navbar() {
                   data-toggle="dropdown"
                 >
                   <FaBell size={16} />
+
                   {/* <div className="notification d-none d-lg-block d-xl-block" /> */}
                   {/* <p className="d-lg-none">Notifications</p> */}
                 </a>
@@ -92,7 +97,7 @@ export default function Navbar() {
               <li className="dropdown nav-item">
                 <a href="#" className="dropdown-toggle nav-link" data-toggle="dropdown">
                   <div className="photo">
-                    <img src="/assets/img/anime3.png" alt="Profile Photo" />
+                    <img src={userImage} alt="Profile Photo" />
                     {/* <ProfileImage /> */}
                   </div>
                   <b className="caret d-none d-lg-block d-xl-block" />
@@ -150,7 +155,6 @@ export default function Navbar() {
           </div>
         </div>
       </div>
-      {/* End Navbar */}
     </>
   );
 }

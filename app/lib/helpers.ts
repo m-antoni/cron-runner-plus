@@ -62,3 +62,14 @@ export function removeDebugInfo(data: any) {
 
   return clean;
 }
+
+// Truncates a URL and adds an ellipsis if it exceeds a certain length.
+export const truncateUrl = (url: string | undefined | null, maxLength: number = 30): string => {
+  if (!url) return '';
+
+  if (url.length <= maxLength) {
+    return url;
+  }
+
+  return `${url.substring(0, maxLength)}...`;
+};

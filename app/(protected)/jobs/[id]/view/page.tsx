@@ -5,23 +5,30 @@ import { Button } from 'react-bootstrap';
 import { FaArrowLeft } from 'react-icons/fa';
 import Link from 'next/link';
 import EnvForm from '@/app/components/forms/EnvForm';
-import AppForm from '@/app/components/forms/AppForm';
 import { useEnvForm } from '@/app/hooks/useEnvForm';
-import { useAppInfoForm } from '@/app/hooks/useAppInfoForm';
 import { useSaveForm } from '@/app/hooks/useSaveForm';
 import Spinner from '@/app/components/ui/Spinner';
 import AlertMessage from '@/app/components/ui/AlertMessage';
-import { useParams, useRouter } from 'next/navigation';
-import { deleteAppAction, getSingleAppAction } from '@/app/actions/app';
+import { useParams } from 'next/navigation';
+import { getSingleAppAction } from '@/app/actions/app';
 import { useDeleteWithAlert } from '@/app/hooks/useDeleteWithAlert';
+import useJob from '@/app/hooks/useJob';
+import { useNotification } from '@/app/hooks/useNotification';
+import { useUser } from '@/app/hooks/useAuth';
+import JobForm from '@/app/components/forms/JobForm';
+import NotificationForm from '@/app/components/forms/NotificationForm';
+import { ScheduleType } from '@/app/types/appTypes';
 
 export default function ViewDetails() {
   const [_loading, _setLoading] = useState(false);
+
   // custom hooks
-  const appInfoForm = useAppInfoForm();
+  const { isLoading } = useUser();
   const envForm = useEnvForm();
   const { saveForm, loading, errors } = useSaveForm();
-  const { showAlert, isDeleting } = useDeleteWithAlert();
+  const { showAlert } = useDeleteWithAlert();
+  const { job, onChangeType, onChangeValue, setJob } = useJob();
+  const { notification, onChangeNotification, setNotification } = useNotification('');
 
   const { id } = useParams();
 
@@ -29,22 +36,45 @@ export default function ViewDetails() {
     // invoke function
     (async () => {
       _setLoading(true);
-      const getApp = await getSingleAppAction(id as string);
-      if (getApp) {
-        appInfoForm.setAppInfo(getApp);
-        envForm.setEnv(getApp.env);
+      const app = await getSingleAppAction(id as string);
+      if (app) {
+        // job
+        setJob({
+          id: app.id,
+          appName: app.appName,
+          url: app.url,
+          isEnabled: app.isEnabled,
+          scheduleType: app.scheduleType as unknown as ScheduleType,
+          intervalMinutes: app.intervalMinutes ?? 2,
+          dailyTime: app.dailyTime ?? '07:00',
+          monthlyDay: app.monthlyDay ?? 15,
+          monthlyTime: app.monthlyTime ?? '09:00',
+          createdAt: app.createdAt,
+          updatedAt: app.updatedAt,
+        });
+
+        // notification
+        setNotification({
+          notifyOnFailure: app.notifyOnFailure,
+          notifyOnRecovery: app.notifyOnRecovery,
+          notificationEmail: app.notificationEmail,
+        });
+        // env
+        envForm.setEnv(app.envVariables);
         _setLoading(false);
       }
     })();
   }, []);
 
+  // submit data / update
   const handleSave = () => {
     const payload = {
-      ...appInfoForm.appInfo,
+      ...job,
+      ...notification,
       env: envForm.env,
     };
 
-    saveForm(payload, id as string);
+    saveForm(payload);
   };
 
   return (
@@ -54,7 +84,7 @@ export default function ViewDetails() {
           <div className="card-body">
             <div className="d-flex justify-content-between">
               <div>
-                <Link href={`/cronlabs`} className="btn btn-secondary px-3">
+                <Link href={`/jobs`} className="btn btn-secondary px-3">
                   <FaArrowLeft /> Back
                 </Link>
               </div>
@@ -94,7 +124,23 @@ export default function ViewDetails() {
           <div className="col-md-12">
             <div className="card">
               <div className="card-body">
-                <AppForm {...appInfoForm} />
+                <JobForm
+                  job={job}
+                  onChangeValue={onChangeValue}
+                  onChangeType={onChangeType}
+                  ScheduleType={ScheduleType}
+                />
+              </div>
+            </div>
+          </div>
+          <div className="col-md-12">
+            <div className="card">
+              <div className="card-body">
+                <NotificationForm
+                  notification={notification}
+                  onChangeNotification={onChangeNotification}
+                  isLoading={isLoading}
+                />
               </div>
             </div>
           </div>

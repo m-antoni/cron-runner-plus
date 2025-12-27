@@ -52,7 +52,7 @@ export default function EnvForm({
     <>
       <div className="d-flex justify-content-between">
         <div>
-          <h4 className="card-title">Environment Variables</h4>
+          <h4 className="card-title">Environment Variables (optional)</h4>
           <p className="category">Set environment-specific config and secrets (such as API key)</p>
         </div>
         <div>

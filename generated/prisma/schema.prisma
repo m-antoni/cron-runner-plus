@@ -13,22 +13,22 @@ datasource db {
 // ==========================================
 
 model User {
-  id            String          @id @default(cuid())
+  id            String    @id @default(cuid())
   name          String?
-  email         String          @unique
+  email         String    @unique
   emailVerified DateTime?
   image         String?
-  
+
   // Relations
   accounts      Account[]
   sessions      Session[]
   Authenticator Authenticator[]
-  
-  // Link to your Apps
-  apps          App[]
 
-  createdAt     DateTime        @default(now())
-  updatedAt     DateTime        @updatedAt
+  // Link to your Apps
+  apps App[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Account {
@@ -85,42 +85,42 @@ model Authenticator {
 // ==========================================
 
 model App {
-  id                String       @id @default(cuid())
-  appName           String       @map("app_name")
-  url               String
-  isEnabled         Boolean      @default(true) @map("is_enabled")
-  
+  id        String  @id @default(cuid())
+  appName   String  @map("app_name")
+  url       String
+  isEnabled Boolean @default(true) @map("is_enabled")
+
   // Form Schedule Fields
-  scheduleType      ScheduleType @map("schedule_type")
-  intervalMinutes   Int?         @map("interval_minutes")
-  dailyTime         String?      @map("daily_time")
-  monthlyDay        Int?         @map("monthly_day")
-  monthlyTime       String?      @map("monthly_time")
+  scheduleType    ScheduleType @map("schedule_type")
+  intervalMinutes Int?         @map("interval_minutes")
+  dailyTime       String?      @map("daily_time")
+  monthlyDay      Int?         @map("monthly_day")
+  monthlyTime     String?      @map("monthly_time")
 
   // Form Notification Fields
-  notifyOnFailure   Boolean      @default(false) @map("notify_on_failure")
-  notifyOnRecovery  Boolean      @default(false) @map("notify_on_recovery")
-  notificationEmail String       @map("notification_email")
+  notifyOnFailure   Boolean @default(false) @map("notify_on_failure")
+  notifyOnRecovery  Boolean @default(false) @map("notify_on_recovery")
+  notificationEmail String  @map("notification_email")
 
   // Relations
-  userId            String       @map("user_id")
-  user              User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  envVariables      EnvVar[]
+  userId       String   @map("user_id")
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  envVariables EnvVar[]
 
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
   @@map("apps")
 }
 
 model EnvVar {
-  id        String @id @default(cuid())
-  envKey    String @map("env_key")
-  envValue  String @map("env_value")
-  
+  id       String @id @default(cuid())
+  envKey   String @map("env_key")
+  envValue String @map("env_value")
+
   // Relation to App
-  appId     String @map("app_id")
-  app       App    @relation(fields: [appId], references: [id], onDelete: Cascade)
+  appId String @map("app_id")
+  app   App    @relation(fields: [appId], references: [id], onDelete: Cascade)
 
   @@unique([appId, envKey])
   @@map("env_vars")
@@ -131,4 +131,3 @@ enum ScheduleType {
   DAILY
   MONTHLY
 }
-

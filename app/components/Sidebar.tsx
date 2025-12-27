@@ -1,12 +1,5 @@
 import Link from 'next/link';
-import {
-  FaReact,
-  FaChartLine,
-  FaAlignLeft,
-  FaClock,
-  FaSuitcase,
-  FaCircleUser,
-} from 'react-icons/fa6';
+import { FaChartLine, FaAlignLeft, FaClock, FaCircleUser } from 'react-icons/fa6';
 
 export default function Sidebar() {
   return (
@@ -23,25 +16,25 @@ export default function Sidebar() {
         </div>
         <ul className="nav">
           <li>
-            <Link href="/cronlabs" className="d-flex align-items-center">
+            <Link href="/dashboard" className="d-flex align-items-center">
               <FaChartLine size={18} />
               <div className="pl-2 fs-md">Dashboard</div>
             </Link>
           </li>
           <li>
-            <Link href="/cronlabs/jobs" className="d-flex align-items-center">
+            <Link href="/jobs" className="d-flex align-items-center">
               <FaClock size={18} />
               <div className="pl-2 fs-md">Cron Jobs</div>
             </Link>
           </li>
           <li>
-            <Link href="/cronlabs/logs" className="d-flex align-items-center">
+            <Link href="/logs" className="d-flex align-items-center">
               <FaAlignLeft size={18} />
               <div className="pl-2 fs-md">logs</div>
             </Link>
           </li>
           <li>
-            <Link href="/cronlabs/contact" className="d-flex align-items-center">
+            <Link href="/contact" className="d-flex align-items-center">
               <FaCircleUser size={18} />
               <div className="pl-2 fs-md">Contact</div>
             </Link>

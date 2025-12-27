@@ -3,16 +3,11 @@
 import { prisma } from '@/app/lib/prisma';
 import { auth } from '@/app/lib/auth'; // Adjust this path to your auth.ts
 import { revalidatePath } from 'next/cache';
+import { AppFormProps } from '../types/appTypes';
 
 // ** --- CREATE ---
-export async function createAppAction(data: {
-  appName: string;
-  url: string;
-  technology: string;
-  github: string;
-  description: string;
-  env: { envKey: string; envValue: string }[];
-}) {
+export async function createAppAction(data: AppFormProps) {
+  // return;
   try {
     // Get the current user session
     const session = await auth();
@@ -22,15 +17,27 @@ export async function createAppAction(data: {
       data: {
         appName: data.appName,
         url: data.url,
-        technology: data.technology,
-        github: data.github,
-        description: data.description,
-        userId: session.user.id, // Link the app to the logged-in user
-        env: {
-          create: data.env,
+        isEnabled: data.isEnabled,
+        scheduleType: data.scheduleType,
+        intervalMinutes: data.intervalMinutes,
+        dailyTime: data.dailyTime,
+        monthlyDay: data.monthlyDay,
+        monthlyTime: data.monthlyTime,
+        notifyOnFailure: data.notifyOnFailure,
+        notifyOnRecovery: data.notifyOnRecovery,
+        notificationEmail: data.notificationEmail,
+        userId: session.user.id,
+        // Use the name from your Schema: 'envVariables'
+        envVariables: {
+          create: data.env.map((item) => ({
+            envKey: item.envKey,
+            envValue: item.envValue,
+          })),
         },
       },
-      include: { env: true },
+      include: {
+        envVariables: true, // Update this to match the relation name too
+      },
     });
 
     revalidatePath('/');
@@ -51,7 +58,7 @@ export async function getAppsAction() {
     const apps = await prisma.app.findMany({
       // Filter so the user ONLY sees their own apps
       where: { userId: session.user.id },
-      include: { env: true },
+      include: { envVariables: true },
       skip: 0,
       take: 20,
       orderBy: { createdAt: 'desc' },
@@ -74,7 +81,7 @@ export async function getSingleAppAction(id: string) {
         id,
         userId: session.user.id, // Security: Ensure the user owns the app they are trying to view
       },
-      include: { env: true },
+      include: { envVariables: true },
     });
 
     return app || null;
@@ -85,17 +92,7 @@ export async function getSingleAppAction(id: string) {
 }
 
 // ** --- UPDATE ---
-export async function updateAppAction(
-  id: string,
-  data: {
-    appName: string;
-    url: string;
-    technology: string;
-    github: string;
-    description: string;
-    env: { envKey: string; envValue: string }[];
-  },
-) {
+export async function updateAppAction(data: AppFormProps) {
   try {
     const session = await auth();
     if (!session?.user?.id) return { success: false, error: 'Unauthorized' };
@@ -104,21 +101,28 @@ export async function updateAppAction(
 
     const result = await prisma.app.update({
       where: {
-        id,
+        id: data.id,
         userId: session.user.id, // Security: Prevent updating apps that don't belong to you
       },
       data: {
         appName: data.appName,
         url: data.url,
-        technology: data.technology,
-        github: data.github,
-        description: data.description,
-        env: {
+        isEnabled: data.isEnabled,
+        scheduleType: data.scheduleType,
+        intervalMinutes: data.intervalMinutes,
+        dailyTime: data.dailyTime,
+        monthlyDay: data.monthlyDay,
+        monthlyTime: data.monthlyTime,
+        notifyOnFailure: data.notifyOnFailure,
+        notifyOnRecovery: data.notifyOnRecovery,
+        notificationEmail: data.notificationEmail,
+        userId: session.user.id,
+        envVariables: {
           deleteMany: {},
           create: envData,
         },
       },
-      include: { env: true },
+      include: { envVariables: true },
     });
 
     revalidatePath('/');

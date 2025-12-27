@@ -4,25 +4,24 @@ import { getAppsAction } from '@/app/actions/app';
 import ButtonGroup from '@/app/components/ui/ButtonGroup';
 import Spinner from '@/app/components/ui/Spinner';
 import { formatDate } from '@/app/lib/formatDate';
-import { removeDebugInfo } from '@/app/lib/helpers';
-import { AppTypes } from '@/app/types/appTypes';
+import { removeDebugInfo, truncateUrl } from '@/app/lib/helpers';
+import { AppFormProps } from '@/app/types/appTypes';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
-export default function Cronlabs() {
-  const [apps, setApps] = useState<AppTypes>([]);
+export default function CronJobs() {
+  const [apps, setApps] = useState<AppFormProps[]>([]);
   const [loading, setLoading] = useState(false);
   const [reload, setReload] = useState(false);
 
   useEffect(() => {
-    // selft invoke function
+    // self invoke function
     (async () => {
       setLoading(true);
       const getApps = await getAppsAction();
       const clean = removeDebugInfo(getApps);
       setApps(clean);
       setLoading(false);
-      // console.log(removeDebugInfo(getApps));
     })();
   }, [reload]);
 
@@ -40,16 +39,15 @@ export default function Cronlabs() {
             <div className="card-body">
               <div className="d-flex align-items-center justify-content-between">
                 <div>
-                  <h4 className="card-title"> List of Applications</h4>
+                  <h4 className="card-title"> List of Cron Jobs</h4>
                 </div>
                 <div>
-                  <Link href={'/cronlabs/add-new'} className="btn btn-warning px-3">
+                  <Link href={'/jobs/add-new'} className="btn btn-warning px-3">
                     Add New
                   </Link>
                 </div>
               </div>
             </div>
-            {/* <div className="card-footer d-flex justify-content-end"></div> */}
           </div>
         </div>
 
@@ -67,8 +65,9 @@ export default function Cronlabs() {
                     <thead className=" text-primary">
                       <tr>
                         <th>App Name</th>
-                        <th>Description</th>
                         <th>URL</th>
+                        <th className="text-center">Enable </th>
+                        <th className="text-center">Schedule Type</th>
                         <th className="text-center">Created At</th>
                         <th></th>
                       </tr>
@@ -78,18 +77,26 @@ export default function Cronlabs() {
                         apps.map((item, index) => (
                           <tr key={index}>
                             <td>{item.appName}</td>
-                            <td>{item.description}</td>
-                            <td>
-                              {/* <span className="badge bg-success text-dark">
-                               <span className="fs-11">RUNNING</span>
-                             </span> */}
-                              {item.url}
-                            </td>
+                            <td>{truncateUrl(item.url, 25)}</td>
                             <td className="text-center">
-                              {formatDate(item.createdAt, 'YYYY-MM-DD')}
+                              {item.isEnabled ? (
+                                <span className="badge bg-success text-dark">
+                                  <span className="fs-11">ACTIVE</span>
+                                </span>
+                              ) : (
+                                <span className="badge bg-primary text-dark">
+                                  <span className="fs-11">DISABLED</span>
+                                </span>
+                              )}
+                            </td>
+
+                            <td className="text-center">{item.scheduleType}</td>
+
+                            <td className="text-center">
+                              {item.createdAt ? formatDate(item.createdAt, 'YYYY-MM-DD') : 'N/A'}
                             </td>
                             <td>
-                              <ButtonGroup id={item.id} dispatch={dispatch} env={item.env} />
+                              <ButtonGroup id={item.id!} dispatch={dispatch} env={item.env} />
                             </td>
                           </tr>
                         ))}

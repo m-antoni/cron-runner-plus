@@ -6,8 +6,8 @@ import GitHub from 'next-auth/providers/github';
 import Facebook from 'next-auth/providers/facebook';
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
+  debug: true, // uncomment for debugging
   adapter: PrismaAdapter(prisma),
-  // MUST USE JWT so the proxy.ts can read the session without crashing
   session: { strategy: 'jwt' },
   providers: [
     Google({ allowDangerousEmailAccountLinking: true }),
@@ -15,24 +15,33 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     Facebook({ allowDangerousEmailAccountLinking: true }),
   ],
   callbacks: {
-    // THIS IS THE REDIRECT LOGIC
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const isProtectedRoute = nextUrl.pathname.startsWith('/cronlabs');
-      // nextUrl.pathname.startsWith('/cronlabs') || nextUrl.pathname.startsWith('/protected');
-
-      if (isProtectedRoute) {
-        if (isLoggedIn) return true;
-        return false; // This triggers the redirect to sign-in
+    // 1. JWT CALLBACK - This runs first on login
+    async jwt({ token, user }) {
+      if (user) {
+        token.id = user.id; // Store ID in the token
       }
-      return true;
+      return token;
     },
+    // 2. SESSION CALLBACK - Exposes token data to the client
     async session({ session, token }) {
-      // Note: When using JWT strategy, use 'token' instead of 'user'
-      if (session?.user && token?.sub) {
-        session.user.id = token.sub;
+      if (session.user && token.id) {
+        session.user.id = token.id as string;
       }
       return session;
+    },
+    // 3. AUTHORIZED CALLBACK - Protecting Routes
+    authorized({ auth, request: { nextUrl } }) {
+      const isLoggedIn = !!auth?.user;
+      const isProtectedRoute =
+        nextUrl.pathname.startsWith('/dashboard') ||
+        nextUrl.pathname.startsWith('/jobs') ||
+        nextUrl.pathname.startsWith('/logs') ||
+        nextUrl.pathname.startsWith('/contact');
+
+      if (isProtectedRoute) {
+        return isLoggedIn; // Returns true if logged in, otherwise redirects to login
+      }
+      return true;
     },
   },
 });

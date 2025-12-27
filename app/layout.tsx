@@ -42,12 +42,6 @@ export default function RootLayout({
         <Script src="/assets/js/plugins/chartjs.min.js" strategy="afterInteractive" />
         <Script src="/assets/js/plugins/bootstrap-notify.js" strategy="afterInteractive" />
 
-        {/* Google Maps (optional) */}
-        <Script
-          src="https://maps.googleapis.com/maps/api/js?key=YOUR_KEY_HERE"
-          strategy="afterInteractive"
-        />
-
         {/* Black Dashboard Core JS */}
         <Script src="/assets/js/black-dashboard.js?v=1.0.0" strategy="afterInteractive" />
       </body>
